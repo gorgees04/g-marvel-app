@@ -7,7 +7,7 @@ const Collection = ({
   category,
 }: {
   title: string;
-  category: CollectionType[];
+  category: CollectionType[] | [];
 }) => {
   if (category.length > 0) {
     return (

@@ -4,7 +4,9 @@ import { Img } from "./definitions";
 // Marvel API form https://developer.marvel.com/
 
 // geting api from .env
-const API_URL = process.env.API_URL;
+const API_URL = "https://gateway.marvel.com";
+const PUBLIC_KEY = "55cf85fd0c1e2b30c2b45b25f027fb86";
+const PRIVATE_KEY = "a1e8519b5275cd80347905f7ae7b37d7df140f86";
 
 // the api require a hash in link
 // using MD5 to make crypto line
@@ -13,8 +15,8 @@ const getHash = (ts: string, privateKey?: string, publicKey?: string) => {
 };
 // combine all the link (baseUrl + ts + apikey + hash)
 const ts = Date.now().toString();
-const apiKey = process.env.PUBLIC_KEY;
-const privateKey = process.env.PRIVATE_KEY;
+const apiKey = PUBLIC_KEY;
+const privateKey = PRIVATE_KEY;
 const hash = getHash(ts, privateKey, apiKey);
 
 const link = `ts=${ts}&apikey=${apiKey}&hash=${hash}`;
@@ -33,7 +35,10 @@ export const urlCharacters = (offset: string) => {
   return `${charactersBaseUrl}?limit=30&offset=${offset}&${link}`;
 };
 
-export const urlCharactersByName = (name: string, offset: string) => {
+export const urlCharactersByName = (
+  name: string | undefined,
+  offset: string
+) => {
   return `${charactersBaseUrl}?nameStartsWith=${name}&offset=${offset}&${link}`;
 };
 
