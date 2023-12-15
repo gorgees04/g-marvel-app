@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Collection from "../Collection";
 import { CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlEventsCharacters } from "@/app/lib/utils";
 
 const EventsCharacters = ({ id }: { id: string }) => {
   const [characters, setCharacters] = useState<CollectionType[] | []>([]);
@@ -15,11 +16,10 @@ const EventsCharacters = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // Events characters
-        const eventsCharactersData = await fetchCategoryCharacters(
-          "events",
-          id
-        );
-        const eventsCharacters = eventsCharactersData.data.results;
+        const URL = urlEventsCharacters(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const eventsCharacters = data.data.results;
 
         setCharacters(eventsCharacters);
       } catch (error) {

@@ -5,6 +5,7 @@ import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
 import { Comic } from "@/app/lib/definitions";
 import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
+import { urlComics, urlComicsByTitle } from "@/app/lib/utils";
 
 const Comics = ({ query, page }: { query?: string; page: string }) => {
   // main Comics & checking on loading
@@ -20,12 +21,13 @@ const Comics = ({ query, page }: { query?: string; page: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        let data;
-        if (query) {
-          data = await fetchCategoryByName("comics", query, offset.toString());
-        } else {
-          data = await fetchCategory("comics", offset.toString());
-        }
+
+        const URL = query
+          ? urlComicsByTitle(query, offset.toString())
+          : urlComics(offset.toString());
+
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedComics = data.data.results;
         setComics(fetchedComics);
       } catch (error) {

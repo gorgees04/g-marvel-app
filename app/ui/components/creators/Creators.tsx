@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
 import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
+import { urlCreators, urlCreatorsByName } from "@/app/lib/utils";
 
 const Creators = ({ query, page }: { query?: string; page: string }) => {
   // main creators & checking on loading
@@ -20,16 +21,13 @@ const Creators = ({ query, page }: { query?: string; page: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        let data;
-        if (query) {
-          data = await fetchCategoryByName(
-            "creators",
-            query,
-            offset.toString()
-          );
-        } else {
-          data = await fetchCategory("creators", offset.toString());
-        }
+
+        const URL = query
+          ? urlCreatorsByName(query, offset.toString())
+          : urlCreators(offset.toString());
+
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedCreators = data.data.results;
         setCreators(fetchedCreators);
       } catch (error) {

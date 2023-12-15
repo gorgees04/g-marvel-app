@@ -1,7 +1,7 @@
 "use client";
 import { Character } from "@/app/lib/definitions";
 import CardDetails from "../CardDetails";
-import { getImageUrl } from "@/app/lib/utils";
+import { getImageUrl, urlCharactersById } from "@/app/lib/utils";
 import { useEffect, useState } from "react";
 import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
 import { fetchCategoryById } from "@/app/lib/data";
@@ -17,7 +17,9 @@ const CharactersDetails = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // fetching character by id
-        const data = await fetchCategoryById("characters", id);
+        const URL = urlCharactersById(id);
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedCharacter = data.data.results;
         setCharater(fetchedCharacter);
       } catch (error) {

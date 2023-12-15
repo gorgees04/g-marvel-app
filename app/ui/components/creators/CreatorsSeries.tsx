@@ -4,6 +4,7 @@ import Collection from "../Collection";
 import { CollectionType } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlCreatorsSeries } from "@/app/lib/utils";
 
 const CreatorsSeries = ({ id }: { id: string }) => {
   const [series, setSeries] = useState<CollectionType[] | []>([]);
@@ -15,8 +16,10 @@ const CreatorsSeries = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // Creators Series
-        const creatorsSeriesData = await fetchCategorySeries("creators", id);
-        const creatorsSeries = creatorsSeriesData.data.results;
+        const URL = urlCreatorsSeries(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const creatorsSeries = data.data.results;
         setSeries(creatorsSeries);
       } catch (error) {
         console.error("Database Error:", error);
