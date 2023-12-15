@@ -1,12 +1,12 @@
 "use client";
-import { fetchCategoryCharacters } from "@/app/lib/data";
+import { fetchCategoryCreators } from "@/app/lib/data";
 import Collection from "../Collection";
-import { useEffect, useState } from "react";
 import { CollectionType } from "@/app/lib/definitions";
+import { useEffect, useState } from "react";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
 
-const SeriesCharacters = ({ id }: { id: string }) => {
-  const [characters, setCharacters] = useState<CollectionType[] | []>([]);
+const SeriesCreators = ({ id }: { id: string }) => {
+  const [creators, setCreators] = useState<CollectionType[] | []>([]);
   const [loading, setLoading] = useState(true);
 
   // geting url from lib/utils.tsx file & fetch using useEffect method
@@ -14,14 +14,11 @@ const SeriesCharacters = ({ id }: { id: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // set loading to false when data is fetching
-        // Series Characters
-        const seriesCharactersData = await fetchCategoryCharacters(
-          "series",
-          id
-        );
-        const seriesCharacters = seriesCharactersData.data.results;
+        // Series Creators
+        const seriesCreatorsData = await fetchCategoryCreators("series", id);
+        const seriesCreators = seriesCreatorsData.data.results;
 
-        setCharacters(seriesCharacters);
+        setCreators(seriesCreators);
       } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch data.");
@@ -40,9 +37,9 @@ const SeriesCharacters = ({ id }: { id: string }) => {
 
   return (
     <div>
-      <Collection title={"Characters"} category={characters} />
+      <Collection title={"Creators"} category={creators} />
     </div>
   );
 };
 
-export default SeriesCharacters;
+export default SeriesCreators;

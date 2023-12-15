@@ -14,7 +14,6 @@ const CreatorsStories = ({ id }: { id: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // set loading to false when data is fetching
-        // characters stories
         // Creators Stories
         const creatorsStoriesData = await fetchCategoryStories("creators", id);
         const creatorsStories = creatorsStoriesData.data.results;

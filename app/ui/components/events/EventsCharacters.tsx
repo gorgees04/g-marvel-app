@@ -37,6 +37,7 @@ const EventsCharacters = ({ id }: { id: string }) => {
   if (loading) {
     return <CollectionLoadingSkeleton />;
   }
+
   return (
     <div>
       <Collection title={"Characters"} category={characters} />
