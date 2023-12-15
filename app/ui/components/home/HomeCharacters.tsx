@@ -17,6 +17,8 @@ const HomeCharacters = () => {
         setLoading(true); // Set loading to false when data is fetching
         const data = await fetchCategory("characters", "0");
         const fetchedCharacters = data.data.results;
+        console.log(fetchedCharacters);
+
         setCharaters(fetchedCharacters);
       } catch (error) {
         console.error("Database Error:", error);
