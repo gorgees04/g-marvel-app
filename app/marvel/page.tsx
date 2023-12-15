@@ -14,8 +14,10 @@ const page = () => {
           src={marvelUni}
           alt="marvel universe"
           width={400}
-          height={0}
+          height={300} // Set the height in proportion to the width to maintain the aspect ratio
+          priority={true}
           className="shadow-lg shadow-black rounded md:w-[500px]"
+          layout="responsive" // Set layout as responsive
         />
         <p className="my-5 lg:mx-5 lg:w-[600px] text-center md:text-lg">
           The Marvel Universe is a fictional shared universe where the stories
@@ -42,6 +44,7 @@ const page = () => {
           alt="marvel universe"
           width={400}
           height={0}
+          priority={true}
           className="shadow-lg shadow-black rounded md:w-[500px]"
         />
       </div>
@@ -52,6 +55,7 @@ const page = () => {
           alt="marvel universe"
           width={400}
           height={0}
+          priority={true}
           className="shadow-lg shadow-black rounded md:w-[500px]"
         />
         <p className="my-5 lg:mx-5 lg:w-[600px] text-center md:text-lg">
