@@ -1,15 +1,41 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import avengersImg from "@/app/ui/img/avengers-1.png";
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CollectionLoadingSkeleton from "./ui/components/loading-skeleton/CollectionLoadingSkeleton";
 import HomeCharacters from "./ui/components/home/HomeCharacters";
 import HomeComics from "./ui/components/home/HomeComics";
 import HomeCreators from "./ui/components/home/HomeCreators";
 import HomeEvents from "./ui/components/home/HomeEvents";
 import HomeSeries from "./ui/components/home/HomeSeries";
+import { CollectionType } from "./lib/definitions";
+import { fetchCategory } from "./lib/data";
+import Collection from "./ui/components/Collection";
 
 export default function Home() {
+  const [characters, setCharaters] = useState<CollectionType[] | []>([]);
+  const [loading, setLoading] = useState(true);
+
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        const data = await fetchCategory("characters", "0");
+        const fetchedCharacters = data.data.results;
+        setCharaters(fetchedCharacters);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch characters data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
+
+    getData();
+  }, []);
+
   return (
     <main className="text-white flex items-center justify-center flex-col my-[80px] mx-[30px] sm:my-[100px] sm:mx-[180px]">
       <div className="text-center mt-10">
@@ -41,15 +67,15 @@ export default function Home() {
         <p>VVV</p>
       </div>
       <div className="my-10">
-        <HomeCharacters />
-
-        <HomeComics />
+        {/* <HomeCharacters /> */}
+        <Collection title="Characters" category={characters} />
+        {/* <HomeComics />
 
         <HomeCreators />
 
         <HomeEvents />
 
-        <HomeSeries />
+        <HomeSeries /> */}
       </div>
     </main>
   );
