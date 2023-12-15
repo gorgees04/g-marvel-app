@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import avengersImg from "@/app/ui/img/avengers-1.png";
@@ -42,15 +41,15 @@ export default function Home() {
         <p>VVV</p>
       </div>
       <div className="my-10">
-        <HomeCharacters />
+        <HomeCharacters key="characters" />
 
-        <HomeComics />
+        {/* <HomeComics />
 
         <HomeCreators />
 
         <HomeEvents />
 
-        <HomeSeries />
+        <HomeSeries /> */}
       </div>
     </main>
   );
