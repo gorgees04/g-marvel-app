@@ -2,7 +2,7 @@
 import { fetchCategoryById } from "@/app/lib/data";
 import React, { useEffect, useState } from "react";
 import CardDetails from "../CardDetails";
-import { getImageUrl } from "@/app/lib/utils";
+import { getImageUrl, urlComicsById } from "@/app/lib/utils";
 import { Comic } from "@/app/lib/definitions";
 import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
 
@@ -16,8 +16,10 @@ const ComicsDetails = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // fetch single comic by id
-        const comicsIdData = await fetchCategoryById("comics", id);
-        const comicsPage = comicsIdData.data.results;
+        const URL = urlComicsById(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const comicsPage = data.data.results;
         setComic(comicsPage);
       } catch (error) {
         console.error("Database Error:", error);

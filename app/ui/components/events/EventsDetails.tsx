@@ -1,7 +1,7 @@
 "use client";
 import { fetchCategoryById } from "@/app/lib/data";
 import CardDetails from "../CardDetails";
-import { getImageUrl } from "@/app/lib/utils";
+import { getImageUrl, urlEventsById } from "@/app/lib/utils";
 import { Events } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
@@ -16,8 +16,10 @@ const EventsDetails = ({ id }: { id: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // set loading to false when data is fetching
-        const eventsIdData = await fetchCategoryById("events", id);
-        const eventsPage = eventsIdData.data.results;
+        const URL = urlEventsById(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const eventsPage = data.data.results;
         setEvent(eventsPage);
       } catch (error) {
         console.error("Database Error:", error);

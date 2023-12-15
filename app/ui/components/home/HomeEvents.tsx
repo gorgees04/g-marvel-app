@@ -4,6 +4,7 @@ import Collection from "../Collection";
 import { useEffect, useState } from "react";
 import { CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlEvents } from "@/app/lib/utils";
 
 const HomeEvents = () => {
   // fetrching Events data
@@ -15,7 +16,9 @@ const HomeEvents = () => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        const data = await fetchCategory("events", "0");
+        const URL = urlEvents("0");
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedEvents = data.data.results;
         setEvents(fetchedEvents);
       } catch (error) {

@@ -4,6 +4,7 @@ import Collection from "../Collection";
 import { useEffect, useState } from "react";
 import { Character, CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlCharacters } from "@/app/lib/utils";
 
 const HomeCharacters = () => {
   // main characters & checking on loading
@@ -15,7 +16,9 @@ const HomeCharacters = () => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        const data = await fetchCategory("characters", "0");
+        const URL = urlCharacters("0");
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedCharacters = data.data.results;
         setCharaters(fetchedCharacters);
       } catch (error) {

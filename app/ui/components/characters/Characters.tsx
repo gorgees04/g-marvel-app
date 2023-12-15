@@ -6,6 +6,7 @@ import { Character } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
 import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
+import { urlCharacters, urlCharactersByName } from "@/app/lib/utils";
 
 export default function Characters({
   query,
@@ -27,16 +28,13 @@ export default function Characters({
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        let data;
-        if (query) {
-          data = await fetchCategoryByName(
-            "characters",
-            query,
-            offset.toString()
-          );
-        } else {
-          data = await fetchCategory("characters", offset.toString());
-        }
+
+        const URL = query
+          ? urlCharactersByName(query, offset.toString())
+          : urlCharacters(offset.toString());
+
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedCharacters = data.data.results;
         setCharaters(fetchedCharacters);
       } catch (error) {

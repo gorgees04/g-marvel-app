@@ -4,6 +4,7 @@ import Collection from "../Collection";
 import { useEffect, useState } from "react";
 import { CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlComicsCharacters, urlComicsCreators } from "@/app/lib/utils";
 
 const ComicsCreators = ({ id }: { id: string }) => {
   // Comics creators
@@ -16,9 +17,10 @@ const ComicsCreators = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // Comics creators
-        const comicsCreatorsData = await fetchCategoryCreators("comics", id);
-        const comicsCreators = comicsCreatorsData.data.results;
-
+        const URL = urlComicsCreators(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const comicsCreators = data.data.results;
         setCreators(comicsCreators);
       } catch (error) {
         console.error("Database Error:", error);

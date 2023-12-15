@@ -4,6 +4,7 @@ import Story from "../Story";
 import { CollectionType } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import StoryLoadingSkeleton from "../loading-skeleton/StoryLoadingSkeleton";
+import { urlComicsStories } from "@/app/lib/utils";
 
 const ComicsStories = ({ id }: { id: string }) => {
   const [stories, setStories] = useState<CollectionType[] | []>([]);
@@ -15,8 +16,10 @@ const ComicsStories = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // Comics stories
-        const comicsStoriesData = await fetchCategoryStories("comics", id);
-        const comicsStories = comicsStoriesData.data.results;
+        const URL = urlComicsStories(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const comicsStories = data.data.results;
 
         setStories(comicsStories);
       } catch (error) {

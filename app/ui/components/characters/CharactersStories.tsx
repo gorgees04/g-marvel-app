@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Story from "../Story";
 import { CollectionType } from "@/app/lib/definitions";
 import StoryLoadingSkeleton from "../loading-skeleton/StoryLoadingSkeleton";
+import { urlCharactersStories } from "@/app/lib/utils";
 
 const CharactersStories = ({ id }: { id: string }) => {
   const [stories, setStories] = useState<CollectionType[] | []>([]);
@@ -15,11 +16,10 @@ const CharactersStories = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // characters stories
-        const characterStoriesData = await fetchCategoryStories(
-          "characters",
-          id
-        );
-        const characterStories = characterStoriesData.data.results;
+        const URL = urlCharactersStories(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const characterStories = data.data.results;
         setStories(characterStories);
       } catch (error) {
         console.error("Database Error:", error);

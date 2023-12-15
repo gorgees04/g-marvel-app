@@ -2,7 +2,7 @@
 import { fetchCategoryById } from "@/app/lib/data";
 import { Series } from "@/app/lib/definitions";
 import CardDetails from "../CardDetails";
-import { getImageUrl } from "@/app/lib/utils";
+import { getImageUrl, urlSeriesById } from "@/app/lib/utils";
 import { useEffect, useState } from "react";
 import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
 
@@ -17,8 +17,10 @@ const SeriesDetails = ({ id }: { id: string }) => {
       try {
         setLoading(true); // set loading to false when data is fetching
         // fetch single series
-        const seriesIdData = await fetchCategoryById("series", id);
-        const seriesPage = seriesIdData.data.results;
+        const URL = urlSeriesById(id);
+        const res = await fetch(URL);
+        const data = await res.json();
+        const seriesPage = data.data.results;
         setSeries(seriesPage);
       } catch (error) {
         console.error("Database Error:", error);

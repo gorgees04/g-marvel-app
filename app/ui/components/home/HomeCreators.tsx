@@ -4,6 +4,7 @@ import Collection from "../Collection";
 import { CollectionType } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
+import { urlCreators } from "@/app/lib/utils";
 
 const HomeCreators = () => {
   // fetrching creators data
@@ -15,7 +16,9 @@ const HomeCreators = () => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        const data = await fetchCategory("creators", "0");
+        const URL = urlCreators("0");
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedCreators = data.data.results;
         setCreators(fetchedCreators);
       } catch (error) {

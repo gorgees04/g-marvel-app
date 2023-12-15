@@ -5,6 +5,7 @@ import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
 import { useEffect, useState } from "react";
 import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
+import { urlEvents, urlEventsByTitle } from "@/app/lib/utils";
 
 const Events = ({ query, page }: { query?: string; page: string }) => {
   // main events & checking on loading
@@ -20,12 +21,13 @@ const Events = ({ query, page }: { query?: string; page: string }) => {
     const getData = async () => {
       try {
         setLoading(true); // Set loading to false when data is fetching
-        let data;
-        if (query) {
-          data = await fetchCategoryByName("events", query, offset.toString());
-        } else {
-          data = await fetchCategory("events", offset.toString());
-        }
+
+        const URL = query
+          ? urlEventsByTitle(query, offset.toString())
+          : urlEvents(offset.toString());
+
+        const res = await fetch(URL);
+        const data = await res.json();
         const fetchedEvents = data.data.results;
         setEvents(fetchedEvents);
       } catch (error) {
