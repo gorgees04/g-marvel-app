@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import avengersImg from "@/app/ui/img/avengers-1.png";
