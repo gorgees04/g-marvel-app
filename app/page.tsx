@@ -8,6 +8,7 @@ import HomeComics from "./ui/components/home/HomeComics";
 import HomeCreators from "./ui/components/home/HomeCreators";
 import HomeEvents from "./ui/components/home/HomeEvents";
 import HomeSeries from "./ui/components/home/HomeSeries";
+import Profile from "./ui/components/home/profile";
 
 export default function Home() {
   return (
@@ -41,7 +42,8 @@ export default function Home() {
         <p>VVV</p>
       </div>
       <div className="my-10">
-        <HomeCharacters key="characters" />
+        <Profile />
+        {/* <HomeCharacters key="characters" /> */}
 
         {/* <HomeComics />
 
