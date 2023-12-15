@@ -23,7 +23,7 @@ const Card = ({
           alt={name}
           width={200}
           height={300}
-          className="md:w-[200px] h-auto overflow-hidden border-b-8 border-b-marvelRed shadow-inner shadow-black"
+          className="w-auto h-auto md:w-[200px] overflow-hidden border-b-8 border-b-marvelRed shadow-inner shadow-black"
           priority={true}
         />
         <p
