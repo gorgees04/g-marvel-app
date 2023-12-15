@@ -14,8 +14,9 @@ const page = () => {
           src={marvelUni}
           alt="marvel universe"
           width={400}
-          height={0}
-          className="shadow-lg shadow-black rounded md:w-[500px]"
+          height={300}
+          priority={true}
+          className="shadow-lg shadow-black rounded w-auto h-auto md:w-[500px]"
         />
         <p className="my-5 lg:mx-5 lg:w-[600px] text-center md:text-lg">
           The Marvel Universe is a fictional shared universe where the stories
@@ -42,6 +43,7 @@ const page = () => {
           alt="marvel universe"
           width={400}
           height={0}
+          priority={true}
           className="shadow-lg shadow-black rounded md:w-[500px]"
         />
       </div>
@@ -52,6 +54,7 @@ const page = () => {
           alt="marvel universe"
           width={400}
           height={0}
+          priority={true}
           className="shadow-lg shadow-black rounded md:w-[500px]"
         />
         <p className="my-5 lg:mx-5 lg:w-[600px] text-center md:text-lg">

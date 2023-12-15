@@ -1,29 +1,47 @@
+"use client";
 import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
 import { Series } from "@/app/lib/definitions";
 import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
+import { useEffect, useState } from "react";
+import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
 
-const Series = async ({ query, page }: { query?: string; page: string }) => {
-  // main category
-  const category = "series";
+const Series = ({ query, page }: { query?: string; page: string }) => {
+  // main series & checking on loading
+  const [series, setSeries] = useState<Series[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
-  // get page params from path
-  const offset = 50 * Number(page);
+  // handling pagination
+  // whenever a click the oofset will be multiplie with page number
+  const offset = 30 * Number(page);
 
-  // fetching series data
-  const seriesData = await fetchCategory(category, offset.toString());
-  let series = seriesData.data.results;
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        let data;
+        if (query) {
+          data = await fetchCategoryByName("series", query, offset.toString());
+        } else {
+          data = await fetchCategory("series", offset.toString());
+        }
+        const fetchSeries = data.data.results;
+        setSeries(fetchSeries);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
 
-  // search series
-  const SearchValue = query;
-  if (SearchValue) {
-    const searchSeriesData = await fetchCategoryByName(
-      category,
-      SearchValue.toLowerCase(),
-      offset.toString()
-    );
-    const searchSeries = searchSeriesData.data.results;
-    series = searchSeries;
+    getData();
+  }, [query, page]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <CardsLoadingSkeletons />;
   }
   return (
     <div>

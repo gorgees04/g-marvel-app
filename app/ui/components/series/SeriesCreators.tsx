@@ -1,12 +1,11 @@
 "use client";
-import { fetchCategory } from "@/app/lib/data";
+import { fetchCategoryCreators } from "@/app/lib/data";
 import Collection from "../Collection";
 import { CollectionType } from "@/app/lib/definitions";
 import { useEffect, useState } from "react";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
 
-const HomeCreators = () => {
-  // fetrching creators data
+const SeriesCreators = ({ id }: { id: string }) => {
   const [creators, setCreators] = useState<CollectionType[] | []>([]);
   const [loading, setLoading] = useState(true);
 
@@ -14,20 +13,22 @@ const HomeCreators = () => {
   useEffect(() => {
     const getData = async () => {
       try {
-        setLoading(true); // Set loading to false when data is fetching
-        const data = await fetchCategory("creators", "0");
-        const fetchedCreators = data.data.results;
-        setCreators(fetchedCreators);
+        setLoading(true); // set loading to false when data is fetching
+        // Series Creators
+        const seriesCreatorsData = await fetchCategoryCreators("series", id);
+        const seriesCreators = seriesCreatorsData.data.results;
+
+        setCreators(seriesCreators);
       } catch (error) {
         console.error("Database Error:", error);
         throw new Error("Failed to fetch data.");
       } finally {
-        setLoading(false); // Set loading to false after data complete fetching
+        setLoading(false); // set loading to false after data complete fetching
       }
     };
 
     getData();
-  }, []);
+  }, [id]);
 
   // if loading is true the loading skeletong will show up
   if (loading) {
@@ -35,10 +36,10 @@ const HomeCreators = () => {
   }
 
   return (
-    <div className="w-screen">
-      <Collection category={creators} title="Creators" />
+    <div>
+      <Collection title={"Creators"} category={creators} />
     </div>
   );
 };
 
-export default HomeCreators;
+export default SeriesCreators;

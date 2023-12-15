@@ -1,29 +1,53 @@
+"use client";
 import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
 import { Creators } from "@/app/lib/definitions";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
+import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
 
-const Creators = async ({ query, page }: { query?: string; page: string }) => {
-  const category = "creators";
-  // get page params from path
-  const offset = 50 * Number(page);
+const Creators = ({ query, page }: { query?: string; page: string }) => {
+  // main creators & checking on loading
+  const [creators, setCreators] = useState<Creators[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
-  // fetching creators data
-  const creatorsData = await fetchCategory(category, offset.toString());
-  let creators = creatorsData.data.results;
+  // handling pagination
+  // whenever a click the oofset will be multiplie with page number
+  const offset = 30 * Number(page);
 
-  // search creators
-  const SearchValue = query;
-  if (SearchValue) {
-    const searchCreatorsData = await fetchCategoryByName(
-      category,
-      SearchValue.toLowerCase(),
-      offset.toString()
-    );
-    const searchCreators = searchCreatorsData.data.results;
-    creators = searchCreators;
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        let data;
+        if (query) {
+          data = await fetchCategoryByName(
+            "creators",
+            query,
+            offset.toString()
+          );
+        } else {
+          data = await fetchCategory("creators", offset.toString());
+        }
+        const fetchedCreators = data.data.results;
+        setCreators(fetchedCreators);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
+
+    getData();
+  }, [query, page]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <CardsLoadingSkeletons />;
   }
+
   return (
     <div>
       <div className="flex flex-wrap justify-center my-4 w-full">

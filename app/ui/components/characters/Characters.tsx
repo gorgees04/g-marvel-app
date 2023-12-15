@@ -1,35 +1,58 @@
-import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
+"use client";
 import Card from "@/app/ui/components/Card";
 import NotFound from "@/app/marvel/not-found";
 // typescript definitions
 import { Character } from "@/app/lib/definitions";
+import { useEffect, useState } from "react";
+import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
+import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
 
-export default async function Characters({
+export default function Characters({
   query,
   page,
 }: {
   query?: string;
   page: string;
 }) {
+  // main characters & checking on loading
+  const [characters, setCharaters] = useState<Character[] | []>([]);
+  const [loading, setLoading] = useState(true);
+
   // handling pagination
   // whenever a click the oofset will be multiplie with page number
-  const category = "characters";
   const offset = 30 * Number(page);
 
-  // geting data from lib/data.tsx file
-  const charactersData = await fetchCategory(category, offset.toString());
-  let characters = charactersData.data.results;
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        let data;
+        if (query) {
+          data = await fetchCategoryByName(
+            "characters",
+            query,
+            offset.toString()
+          );
+        } else {
+          data = await fetchCategory("characters", offset.toString());
+        }
+        const fetchedCharacters = data.data.results;
+        setCharaters(fetchedCharacters);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch characters data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
 
-  // geting data from params to filter the search engin
-  const SearchValue = query;
-  if (SearchValue) {
-    const searchCharactersData = await fetchCategoryByName(
-      category,
-      SearchValue.toLowerCase(),
-      offset.toString()
-    );
-    const searchCharacters = searchCharactersData.data.results;
-    characters = searchCharacters;
+    getData();
+  }, [query, page]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <CardsLoadingSkeletons />;
   }
 
   return (

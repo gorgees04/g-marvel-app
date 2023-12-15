@@ -1,30 +1,49 @@
+"use client";
 import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
 import { Comic } from "@/app/lib/definitions";
+import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
 
-const Comics = async ({ query, page }: { query?: string; page: string }) => {
-  // page name
-  const category = "comics";
-  // get page params from path
-  const offset = 50 * Number(page);
+const Comics = ({ query, page }: { query?: string; page: string }) => {
+  // main Comics & checking on loading
+  const [comics, setComics] = useState<Comic[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
-  // fetching comics data
-  const comicsData = await fetchCategory(category, offset.toString());
-  let comics = comicsData.data.results;
+  // handling pagination
+  // whenever a click the oofset will be multiplie with page number
+  const offset = 30 * Number(page);
 
-  // search comics
-  const SearchValue = query;
-  if (SearchValue) {
-    const searchComicsData = await fetchCategoryByName(
-      category,
-      SearchValue.toLowerCase(),
-      offset.toString()
-    );
-    const searchComics = searchComicsData.data.results;
-    comics = searchComics;
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        let data;
+        if (query) {
+          data = await fetchCategoryByName("comics", query, offset.toString());
+        } else {
+          data = await fetchCategory("comics", offset.toString());
+        }
+        const fetchedComics = data.data.results;
+        setComics(fetchedComics);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
+
+    getData();
+  }, [query, page]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <CardsLoadingSkeletons />;
   }
+
   return (
     <div>
       <div className="flex flex-wrap justify-center my-4 w-full">
