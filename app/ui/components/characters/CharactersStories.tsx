@@ -6,7 +6,6 @@ import { CollectionType } from "@/app/lib/definitions";
 import StoryLoadingSkeleton from "../loading-skeleton/StoryLoadingSkeleton";
 
 const CharactersStories = ({ id }: { id: string }) => {
-  // main characters & checking on loading
   const [stories, setStories] = useState<CollectionType[] | []>([]);
   const [loading, setLoading] = useState(true);
 

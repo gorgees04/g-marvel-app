@@ -7,7 +7,7 @@ import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
 import { fetchCategoryById } from "@/app/lib/data";
 
 const CharactersDetails = ({ id }: { id: string }) => {
-  // main characters & checking on loading
+  // character & checking on loading
   const [character, setCharater] = useState<Character[] | []>([]);
   const [loading, setLoading] = useState(true);
 

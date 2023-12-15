@@ -1,13 +1,39 @@
+"use client";
 import { fetchCategoryById } from "@/app/lib/data";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CardDetails from "../CardDetails";
 import { getImageUrl } from "@/app/lib/utils";
 import { Comic } from "@/app/lib/definitions";
+import DetailsSkeletonLoading from "../loading-skeleton/DetailsSkeletonLoading";
 
-const ComicsDetails = async ({ id }: { id: string }) => {
-  // fetch single comic by id
-  const comicsIdData = await fetchCategoryById("comics", id);
-  const comicsPage = comicsIdData.data.results;
+const ComicsDetails = ({ id }: { id: string }) => {
+  const [comic, setComic] = useState<Comic[] | []>([]);
+  const [loading, setLoading] = useState(true);
+
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // set loading to false when data is fetching
+        // fetch single comic by id
+        const comicsIdData = await fetchCategoryById("comics", id);
+        const comicsPage = comicsIdData.data.results;
+        setComic(comicsPage);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch data.");
+      } finally {
+        setLoading(false); // set loading to false after data complete fetching
+      }
+    };
+
+    getData();
+  }, [id]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <DetailsSkeletonLoading />;
+  }
 
   // get date from api
   const getPublishedDate = (dateOfPublish: string) => {
@@ -19,7 +45,7 @@ const ComicsDetails = async ({ id }: { id: string }) => {
   };
   return (
     <div className="m-10">
-      {comicsPage.map((comic: Comic) => {
+      {comic.map((comic: Comic) => {
         return (
           <CardDetails
             name={comic.title}

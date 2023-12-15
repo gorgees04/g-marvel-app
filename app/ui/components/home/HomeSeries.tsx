@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
 
-const HomeSeries = async () => {
+const HomeSeries = () => {
   // fetrching series data
   const [series, setSeries] = useState<CollectionType[] | []>([]);
   const [loading, setLoading] = useState(true);

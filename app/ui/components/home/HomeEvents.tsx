@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CollectionType } from "@/app/lib/definitions";
 import CollectionLoadingSkeleton from "../loading-skeleton/CollectionLoadingSkeleton";
 
-const HomeEvents = async () => {
+const HomeEvents = () => {
   // fetrching Events data
   const [events, setEvents] = useState<CollectionType[] | []>([]);
   const [loading, setLoading] = useState(true);
