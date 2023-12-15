@@ -41,21 +41,15 @@ export default function Home() {
         <p>VVV</p>
       </div>
       <div className="my-10">
-        <Suspense fallback={<CollectionLoadingSkeleton />}>
-          <HomeCharacters />
-        </Suspense>
-        <Suspense fallback={<CollectionLoadingSkeleton />}>
-          <HomeComics />
-        </Suspense>
-        <Suspense fallback={<CollectionLoadingSkeleton />}>
-          <HomeCreators />
-        </Suspense>
-        <Suspense fallback={<CollectionLoadingSkeleton />}>
-          <HomeEvents />
-        </Suspense>
-        <Suspense fallback={<CollectionLoadingSkeleton />}>
-          <HomeSeries />
-        </Suspense>
+        <HomeCharacters />
+
+        <HomeComics />
+
+        <HomeCreators />
+
+        <HomeEvents />
+
+        <HomeSeries />
       </div>
     </main>
   );
