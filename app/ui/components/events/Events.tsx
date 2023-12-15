@@ -1,28 +1,47 @@
+"use client";
 import { fetchCategory, fetchCategoryByName } from "@/app/lib/data";
 import { Events } from "@/app/lib/definitions";
 import Card from "../Card";
 import NotFound from "@/app/marvel/not-found";
+import { useEffect, useState } from "react";
+import CardsLoadingSkeletons from "../loading-skeleton/CardsLoadingSkeletons";
 
-const Events = async ({ query, page }: { query?: string; page: string }) => {
-  // main category
-  const category = "events";
-  // get page params from path
-  const offset = 50 * Number(page);
+const Events = ({ query, page }: { query?: string; page: string }) => {
+  // main events & checking on loading
+  const [events, setEvents] = useState<Events[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
-  // fetching Events data
-  const eventsData = await fetchCategory(category, offset.toString());
-  let events = eventsData.data.results;
+  // handling pagination
+  // whenever a click the oofset will be multiplie with page number
+  const offset = 30 * Number(page);
 
-  // search Events
-  const SearchValue = query;
-  if (SearchValue) {
-    const searchEventsData = await fetchCategoryByName(
-      category,
-      SearchValue.toLowerCase(),
-      offset.toString()
-    );
-    const searchEvents = searchEventsData.data.results;
-    events = searchEvents;
+  // geting url from lib/utils.tsx file & fetch using useEffect method
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        setLoading(true); // Set loading to false when data is fetching
+        let data;
+        if (query) {
+          data = await fetchCategoryByName("events", query, offset.toString());
+        } else {
+          data = await fetchCategory("events", offset.toString());
+        }
+        const fetchedEvents = data.data.results;
+        setEvents(fetchedEvents);
+      } catch (error) {
+        console.error("Database Error:", error);
+        throw new Error("Failed to fetch data.");
+      } finally {
+        setLoading(false); // Set loading to false after data complete fetching
+      }
+    };
+
+    getData();
+  }, [query, page]);
+
+  // if loading is true the loading skeletong will show up
+  if (loading) {
+    return <CardsLoadingSkeletons />;
   }
   return (
     <div>
